@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <title>Bootstrap 3 Template</title>
+    <meta name="generator" content="Bootply" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <link href="css/lib/bootstrap.min.css" rel="stylesheet" />
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="css/styles.css" rel="stylesheet" />
+  </head>
+  <body ng-app="myapp">
+    <div class="container" ng-controller="mycontroller" style="padding: 10px">
+      <div class="d-flex justify-content-center align-items-center">
+        <div class="spinner-border text-info" role="status" ng-style="loading">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+      <div class="subcontainer" ng-style="loaded" style="display: none">
+        <section id="JoinPage" ng-show="page=='join'">
+          <div class="card card-body bg-light" style="padding: 10px">
+            <form class="form">
+              <textarea
+                class="form-control input-xlarge"
+                rows="5"
+                cols="80"
+                ng-model="mpassword"
+                placeholder="If you already have a Master Password, enter it here."
+              ></textarea>
+              <button
+                type="submit"
+                class="btn btn-secondary btn-block"
+                ng-click="do_restore()"
+                style="margin-top: 10px"
+              >
+                Restore
+              </button>
+            </form>
+            <div style="margin: 10px" class="text-center">OR</div>
+            <button
+              type="submit"
+              class="btn btn-info btn-block"
+              ng-click="do_join()"
+            >
+              Join
+            </button>
+          </div>
+        </section>
+
+        <section id="PickPassword" ng-show="page=='pick_password'">
+          <div class="card card-body bg-light">
+            <form class="form">
+              <div class="form-group">
+                <label for="pick_password" class="text-info"
+                  >Pick Password</label
+                ><br />
+                <input
+                  type="password"
+                  class="form-control"
+                  ng-model="pick_password"
+                />
+              </div>
+              <div class="form-group">
+                <label for="confirm_password" class="text-info"
+                  >Confirm Password</label
+                ><br />
+                <input
+                  type="password"
+                  class="form-control"
+                  ng-model="confirm_password"
+                />
+              </div>
+
+              <div
+                class="form-group"
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-top: 10px;
+                "
+              >
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  ng-click="setup_join_page()"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-info"
+                  ng-click="do_set_password()"
+                >
+                  Set Password
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <section id="LoginPage" ng-show="page=='login'">
+          <div class="card card-body bg-light">
+            <form class="form">
+              <div class="form-group">
+                <label for="password" class="text-info">Enter Password</label
+                ><br />
+                <input
+                  type="password"
+                  class="form-control"
+                  ng-model="password"
+                />
+              </div>
+              <input
+                type="submit"
+                value="Login"
+                class="btn btn-info btn-block"
+                ng-click="do_login()"
+              />
+              <button
+                type="button"
+                class="btn btn-secondary btn-block"
+                ng-click="do_reset()"
+              >
+                Reset
+              </button>
+            </form>
+          </div>
+          <!-- </div>
+        </div> -->
+        </section>
+
+        <section id="ShowDataPage" ng-show="page=='show_data'">
+          <div class="row">
+            <div class="col">
+              <button
+                type="submit"
+                class="btn btn-outline-info btn-sm btn-block"
+                ng-click="setup_authorize_drive()"
+              >
+                Authorize
+              </button>
+            </div>
+            <div class="col">
+              <button
+                type="submit"
+                class="btn btn-outline-info btn-sm btn-block"
+                ng-click="setup_edit_data_page()"
+              >
+                Edit
+              </button>
+            </div>
+          </div>
+          <div class="row" style="margin-top: 10px">
+            <div class="col">
+              <button
+                type="submit"
+                class="btn btn-outline-info btn-sm btn-block"
+                ng-click="setup_show_previous_page()"
+              >
+                Previous
+              </button>
+            </div>
+            <div class="col">
+              <button
+                type="submit"
+                class="btn btn-outline-info btn-sm btn-block"
+                ng-click="setup_show_restore_page()"
+              >
+                Restore
+              </button>
+            </div>
+          </div>
+          <div class="row" style="margin-top: 10px">
+            <div class="col">
+              <button
+                type="submit"
+                class="btn btn-outline-info btn-sm btn-block"
+                ng-click="setup_show_master_page()"
+              >
+                Master
+              </button>
+            </div>
+            <div class="col">
+              <button
+                type="submit"
+                class="btn btn-outline-info btn-sm btn-block"
+                ng-click="setup_change_password_page()"
+              >
+                Password
+              </button>
+            </div>
+            <div class="col">
+              <button
+                type="submit"
+                class="btn btn-outline-info btn-sm btn-block"
+                ng-click="setup_logout_page()"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+          <div class="card card-body bg-light" style="margin-top: 10px">
+            <pre>{{data}}</pre>
+          </div>
+        </section>
+
+        <section id="EditDataPage" ng-show="page=='edit_data'">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <button
+              type="submit"
+              class="btn btn-secondary"
+              ng-click="setup_show_data_page()"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-info"
+              ng-click="do_save()"
+              ng-style="savebutton"
+            >
+              Save
+            </button>
+            <div
+              class="spinner-border text-info"
+              role="status"
+              ng-style="saveloading"
+              style="display: none"
+            >
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <div class="card card-body bg-light" style="margin-top: 10px">
+            <form class="form">
+              <textarea
+                class="form-control input-xlarge"
+                rows="15"
+                cols="50"
+                ng-model="data"
+                placeholder=""
+              >
+{{data}}</textarea
+              >
+            </form>
+          </div>
+        </section>
+
+        <section id="ShowMasterPage" ng-show="page=='show_master'">
+          <div>
+            <button
+              type="submit"
+              class="btn btn-secondary"
+              ng-click="setup_show_data_page()"
+            >
+              Back
+            </button>
+          </div>
+          <div class="card card-body bg-light" style="margin-top: 10px">
+            <span>
+              Master Key Phrase :
+              <a ng-click="copy_to_clipboard(key.phrase,'Master Key Phrase')"
+                >{{key.phrase}}
+              </a></span
+            >
+            <span>
+              Master Key :
+              <a ng-click="copy_to_clipboard(key.master,'Master Key')"
+                >{{key.master}}</a
+              >
+            </span>
+            <span>
+              Store Key :
+              <a ng-click="copy_to_clipboard(key.store,'Store Key')"
+                >{{key.store}}</a
+              >
+            </span>
+          </div>
+        </section>
+
+        <section id="ShowPreviousPage" ng-show="page=='show_previous'">
+          <div>
+            <button
+              type="submit"
+              class="btn btn-secondary"
+              ng-click="setup_show_data_page()"
+            >
+              Back
+            </button>
+          </div>
+          <!-- <div ng-repeat="data in data_previous">
+          <pre>{{data.name}}</pre>
+        </div> -->
+          <span
+            class="list-group"
+            ng-repeat="data in data_previous"
+            style="margin-top: 10px"
+          >
+            <li
+              class="list-group-item"
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+              "
+            >
+              <small>{{data.name}}</small>
+              <button
+                type="submit"
+                class="btn btn-link btn-sm"
+                ng-click="setup_view_data_page(data.id);$event.preventDefault()"
+              >
+                View
+              </button>
+            </li>
+          </span>
+        </section>
+
+        <section id="ViewDataPage" ng-show="page=='view_data'">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <button
+              type="submit"
+              class="btn btn-secondary"
+              ng-click="setup_show_previous_page()"
+            >
+              Back
+            </button>
+            <button
+              type="submit"
+              class="btn btn-info"
+              ng-style="usebutton"
+              ng-click="setup_use_data()"
+            >
+              Use
+            </button>
+            <div
+              class="spinner-border text-info"
+              role="status"
+              ng-style="useloading"
+              style="display: none"
+            >
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <div class="card card-body bg-light" style="margin-top: 10px">
+            <pre>{{previous_data_content}}</pre>
+          </div>
+        </section>
+
+        <section id="RestoreBackupPage" ng-show="page=='restore_backup'">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <div>
+              <button
+                type="submit"
+                class="btn btn-secondary"
+                ng-click="setup_show_data_page()"
+              >
+                Cancel
+              </button>
+            </div>
+            <button
+              type="button"
+              class="btn btn-info"
+              ng-style="restorebutton"
+              ng-click="do_restore_backup()"
+            >
+              Restore
+            </button>
+            <div
+              class="spinner-border text-info"
+              role="status"
+              ng-style="restoreloading"
+              style="display: none"
+            >
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <div class="card card-body bg-light" style="margin-top: 10px">
+            <form class="form">
+              <div class="form-group">
+                <label for="current_password" class="text-info"
+                  >Restore Back Up Files Link</label
+                ><br />
+                <input
+                  type="text"
+                  class="form-control"
+                  ng-model="restore_link"
+                  required
+                />
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <section id="ChangePasswordPage" ng-show="page=='change_password'">
+          <div class="card card-body bg-light">
+            <form class="form">
+              <div class="form-group">
+                <label for="current_password" class="text-info"
+                  >Current Password</label
+                ><br />
+                <input
+                  type="password"
+                  class="form-control"
+                  ng-model="current_password"
+                />
+              </div>
+              <div class="form-group">
+                <label for="new_password" class="text-info">New Password</label
+                ><br />
+                <input
+                  type="password"
+                  class="form-control"
+                  ng-model="new_password"
+                />
+              </div>
+              <div class="form-group">
+                <label for="confirm_password" class="text-info"
+                  >Confirm Password</label
+                ><br />
+                <input
+                  type="password"
+                  class="form-control"
+                  ng-model="confirm_password"
+                />
+              </div>
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <div>
+                  <button
+                    type="submit"
+                    class="btn btn-secondary"
+                    ng-click="setup_show_data_page()"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-info"
+                  ng-click="do_change_password()"
+                >
+                  Change
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <section id="NewContactPage" ng-show="page=='new_contact'">
+          <div class="row">
+            <div class="col-lg-8">
+              <form class="form-inline well">
+                <div class="col-md-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Handle"
+                    ng-model="handle"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Name"
+                    ng-model="name"
+                  />
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  ng-click="do_new_contact()"
+                >
+                  Add
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  ng-click="setup_recent_contacts_page()"
+                >
+                  Cancel
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section id="NewMessagePage" ng-show="page=='new_message'">
+          <div class="row">
+            <div class="col-lg-8">
+              <form class="form-inline well">
+                <div class="col-md-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Handle"
+                    ng-model="handle"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <textarea
+                    class="form-control input-xlarge"
+                    rows="3"
+                    ng-model="message"
+                    placeholder="Message"
+                  ></textarea>
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  ng-click="do_new_message()"
+                >
+                  Send
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  ng-click="setup_recent_contacts_page()"
+                >
+                  Cancel
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section id="MessagesPage" ng-show="page=='messages'">
+          <h3>Messages with {{name}} ({{handle}})</h3>
+          <ul>
+            <div
+              ng-repeat="x in messages track by $index"
+              ng-init="y = get_message_summary(x)"
+            >
+              <!--
+        <a ng-click="$parent.page='edit_contact';$parent.handle=y.handle;$parent.name=y.name">{{ y.handle }}</a> {{y.to}}
+        <a ng-click="$parent.page='messages';$parent.handle=y.handle">{{y.message}}</a>
+-->
+              {{y.to}} {{y.datetime}}
+              <br />
+              {{y.message}}
+            </div>
+          </ul>
+          <div>
+            <button
+              type="submit"
+              class="btn btn-secondary"
+              ng-click="setup_new_message_page()"
+            >
+              New Message
+            </button>
+            <button
+              type="submit"
+              class="btn btn-secondary"
+              ng-click="setup_recent_contacts_page()"
+            >
+              Contacts
+            </button>
+          </div>
+        </section>
+
+        <section id="EditContactPage" ng-show="page=='edit_contact'">
+          <div class="row">
+            <div class="col-lg-8">
+              <form class="form-inline well">
+                <div class="col-md-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Handle"
+                    ng-model="handle"
+                    disabled
+                  />
+                </div>
+                <div class="col-md-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Name"
+                    ng-model="name"
+                  />
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  ng-click="do_update_contact()"
+                >
+                  Update
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  ng-click="setup_recent_contacts_page()"
+                >
+                  Cancel
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- script references -->
+    <script src="js/lib/jquery-2.1.4.min.js"></script>
+    <script src="js/lib/angular.min.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
+    <script src="nacl.js"></script>
+    <script src="validator.js"></script>
+    <script src="bundle.js"></script>
+    <script src="gapi.js"></script>
+  </body>
+</html>
